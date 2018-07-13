@@ -12,6 +12,7 @@ def parse_args(*argument_array):
 def main(args):
     data = np.load(args.data)
     plt.scatter(data[:,0], data[:, 1], alpha=0.5)
+    plt.axis('off')
     plt.show()
 
 if __name__ == '__main__':

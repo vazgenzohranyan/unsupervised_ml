@@ -15,6 +15,7 @@ def parse_args(*argument_array):
     parser.add_argument('-k', help='number of clusters', type=int)
     parser.add_argument('--algorithm', choices=['KMeans', 'KMeansPlusPlus'],
                         action=AlgorithmSelectionAction)
+    parser.add_argument('--name', help='type your name')
     return parser.parse_args()
 
 
@@ -33,6 +34,8 @@ def main(args):
     for i in range(args.k):
         plt.scatter(data[clusters[i]][:, 0], data[clusters[i]][:, 1],
                     c=colors[i], alpha=0.5)
+    plt.axis('off')
+    plt.savefig('K_Means_results_{}'.format(args.name))
     plt.show()
 
 
