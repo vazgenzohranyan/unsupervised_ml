@@ -1,3 +1,12 @@
+import numpy as np
+
+def preprocessing(data):
+    new_data = []
+    for index,d in enumerate(data):
+        for c in d:
+            new_data.append([c[0],c[1],index])
+    return np.array(new_data)
+
 class K_NN:
     def __init__(self, k):
         """
@@ -9,13 +18,38 @@ class K_NN:
         """
         :param data: 3D array, where data[i, j] is i-th classes j-th point (vector: D dimenstions)
         """
-        # TODO: preprocessing
-        pass
-
+        
+        self.data = preprocessing(data)
+        
+        return self.data
+    
     def predict(self, data):
         """
         :param data: 2D array of floats N points each D dimensions
         :return: array of integers
         """
-        # TODO: predict
-        return 0
+        predictions = []
+        if data.shape == (data.shape[0],):
+            dist = []
+            for c in self.data:
+                dist.append([np.linalg.norm(data - c[:2]), c[2]])
+            dist.sort()
+            dist = np.array(dist)
+            pr = dist[:int(self.k)][:, 1]
+            unique_elements, counts_elements = np.unique(pr, return_counts=True)
+
+            return unique_elements[np.argmax(counts_elements)]
+        else:
+            for d in data:
+                dist = []
+                for c in self.data:
+                    dist.append([np.linalg.norm(d-c[:2]), c[2]])
+                dist.sort()
+                dist = np.array(dist)
+                pr = dist[:int(self.k)][:, 1]
+                unique_elements, counts_elements = np.unique(pr, return_counts=True)
+
+                predictions.append(unique_elements[np.argmax(counts_elements)])
+            
+            return np.array(predictions)
+        
