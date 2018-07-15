@@ -28,6 +28,7 @@ class K_NN:
         :param data: 2D array of floats N points each D dimensions
         :return: array of integers
         """
+<<<<<<< HEAD
         predictions = []
         if data.shape == (data.shape[0],):
             dist = []
@@ -53,3 +54,12 @@ class K_NN:
             
             return np.array(predictions)
         
+=======
+        data = np.array(data)
+        shp = data.shape
+        if len(data.shape) == 1:
+            data = data.reshape([1] + list(data.shape))
+        # TODO: predict
+        prediction = np.array([0])
+        return prediction.reshape(shp[:-1])
+>>>>>>> e8a0bc6ebf161be007748b10a7a530831fd9c8b6

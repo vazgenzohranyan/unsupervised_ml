@@ -1,6 +1,7 @@
-from k_means import KMeans, KMeansPlusPlus
+from k_means_solved import KMeans, KMeansPlusPlus
 import numpy as np
 import argparse
+from matplotlib import image as mpimg
 import matplotlib.pyplot as plt
 
 
@@ -11,7 +12,7 @@ class AlgorithmSelectionAction(argparse.Action):
 
 def parse_args(*argument_array):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data', help='path of data')
+    parser.add_argument('--path', help='path of img')
     parser.add_argument('-k', help='number of clusters', type=int)
     parser.add_argument('--algorithm', choices=['KMeans', 'KMeansPlusPlus'],
                         action=AlgorithmSelectionAction)
@@ -20,22 +21,18 @@ def parse_args(*argument_array):
 
 
 def main(args):
-    data = np.load(args.data)
+    img = mpimg.imread(args.path)
+    shp = img.shape
+    k = args.k
     kmeans = args.algorithm(args.k)
-    kmeans.fit(data)
-    labels, means = kmeans.predict(data)
-    colors = 'bgrcmyk'
-
-    clusters = {i: [] for i in range(args.k)}
-
-    for i, l in enumerate(labels):
-        clusters[l].append(i)
-
-    for i in range(args.k):
-        plt.scatter(data[clusters[i]][:, 0], data[clusters[i]][:, 1],
-                    c=colors[i], alpha=0.5)
+    if len(shp) == 2:
+        img = img.reshape(list(img.shape) + [1])
+    kmeans.fit(img)
     plt.axis('off')
-    plt.savefig('K_Means_results_{}'.format(args.name))
+    new_img = kmeans.predict(img)[1]
+    new_img.reshape(shp)
+    plt.imshow(new_img)
+    plt.savefig('{}_{}'.format(args.path, args.name))
     plt.show()
 
 
