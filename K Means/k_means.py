@@ -1,7 +1,7 @@
 import numpy as np
 
 class KMeans:
-    def __init__(self, k, max_iter = 30):
+    def __init__(self, k, max_iter = 10):
         self.k = k
         self.max_iter = max_iter
         
@@ -10,8 +10,13 @@ class KMeans:
         :param data: numpy array of shape (..., dims)
         """
         self.dim = data.shape[-1]
-        self._initialize_means(data)
+        shp = data.shape
         
+        if len(shp) >= 3:
+                data = data.reshape([shp[0]*shp[1],shp[2]])
+                
+        self._initialize_means(data)
+
         for i in range(self.max_iter): 
             
             self.clusters = {}
@@ -43,14 +48,18 @@ class KMeans:
         """
         labels = []
         means = []
+        shp = data.shape
         
+        if len(shp) >= 3:
+                data = data.reshape([shp[0]*shp[1],shp[2]])
+
         for d in data:
             distances = np.array([np.linalg.norm(d-c) for c in self.centers])
             cluster_index = np.argmin(distances)
             labels.append(cluster_index)
             means.append(self.centers[cluster_index])
         
-        return labels, means
+        return np.array(labels), np.array(means)
 
 
 class KMeansPlusPlus(KMeans):
