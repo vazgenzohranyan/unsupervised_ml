@@ -1,4 +1,4 @@
-from k_means_solved import KMeans, KMeansPlusPlus
+from k_means import KMeans, KMeansPlusPlus
 import numpy as np
 import argparse
 from matplotlib import image as mpimg
@@ -23,6 +23,7 @@ def parse_args(*argument_array):
 def main(args):
     img = mpimg.imread(args.path)
     shp = img.shape
+    tp = img.dtype
     k = args.k
     kmeans = args.algorithm(args.k)
     if len(shp) == 2:
@@ -30,9 +31,9 @@ def main(args):
     kmeans.fit(img)
     plt.axis('off')
     new_img = kmeans.predict(img)[1]
-    new_img.reshape(shp)
+    new_img = new_img.reshape(shp).astype(tp)
     plt.imshow(new_img)
-    plt.savefig('{}_{}'.format(args.path, args.name))
+    plt.savefig('{}_{}.jpg'.format(args.path.split('.')[0], args.name))
     plt.show()
 
 
