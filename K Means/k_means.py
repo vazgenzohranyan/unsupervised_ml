@@ -32,7 +32,7 @@ class KMeans:
             for cluster in self.clusters:
                 center = np.mean(np.array(self.clusters[cluster]),axis=0)
                 self.centers.append(center)
-              
+
         return self.clusters
             
     def _initialize_means(self, data):
